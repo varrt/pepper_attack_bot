@@ -12,8 +12,19 @@ class Client
     private HttpClientInterface $client;
     private string $url = 'https://api.pepperattack.com';
 
+    private array $headers = [
+        'user-agent' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36',
+        'origin' => 'https://play.pepperattack.com',
+        'referer' => 'https://play.pepperattack.com',
+        'content-type' => 'application/json',
+        'accept-language' => 'pl-PL,pl;q=0.9,en-US;q=0.8,en;q=0.7',
+        'accept-encoding' => 'gzip, deflate, br',
+        'accept' => 'application/json',
+    ];
 
-    public function __construct() {
+
+    public function __construct()
+    {
         $this->client = HttpClient::createForBaseUri($this->url);
     }
 
@@ -21,8 +32,9 @@ class Client
     {
         $response = $this->client->request(
             'POST',
-            $this->url."/auth/login",
+            $this->url . "/auth/login",
             [
+                'headers' => $this->headers,
                 'json' => [
                     'email' => $email,
                     'password' => $password
@@ -38,11 +50,11 @@ class Client
     {
         $this->client->request(
             'POST',
-            $this->url."/inventory/ration/charge",
+            $this->url . "/inventory/ration/charge",
             [
-                'headers' => [
-                    'authorization' => 'Bearer '. $this->token
-                ]
+                'headers' => array_merge([
+                    'authorization' => 'Bearer ' . $this->token
+                ], $this->headers)
             ]
         );
     }
