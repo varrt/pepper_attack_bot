@@ -1,0 +1,19 @@
+{
+    "name": "varrtik/pepper-attack-bot",
+    "description": "PepperAttack Bot",
+    "type": "project",
+    "require": {
+        "symfony/http-client": "^6.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "PepperAttackBot\\": "src/PepperAttackBot"
+        }
+    },
+    "authors": [
+        {
+            "name": "Varrt",
+            "email": "varrtik@gmail.com"
+        }
+    ]
+}
