@@ -1,13 +1,20 @@
 # Pepper Attack Bot
 
-Version: 0.1.0
+Version: 0.1.1
 
 ## Requirements
 
 - PHP 8.1
+- Composer 2.x
 
+## Install application
 
-## Running application with arguments
+In directory with bot
+```shell
+compsoer install
+```
+
+## Running application
 
 ```shell
 php run.php you_remail your_password
