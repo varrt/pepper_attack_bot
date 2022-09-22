@@ -1,6 +1,6 @@
 # Pepper Attack Bot
 
-Version: 0.1.1
+Version: 0.1.2
 
 ## Requirements
 
@@ -52,4 +52,4 @@ And you append a line on end of file
 * */6 * * * php BOT_DIR_PATH your_email your_password
 ```
 
-Save file and forgot to collection rotion :)
+Save file and forgot to collection ration :)
