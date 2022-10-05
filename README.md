@@ -1,6 +1,6 @@
 # Pepper Attack Bot
 
-Version: 0.1.4
+Version: 0.2
 
 ## Requirements
 
@@ -17,7 +17,8 @@ compsoer install
 ## Running application
 
 ```shell
-php run.php you_remail your_password
+php collect_rotion.php you_remail your_password
+php admire.php you_remail your_password
 ```
 
 Bot doesn't write your password or email anywhere. It's use only for login to PepperAttack game.
@@ -49,7 +50,8 @@ nano /etc/crontab
 
 And you append a line on end of file
 ```shell
-* */6 * * * php BOT_DIR_PATH your_email your_password
+10 */6 * * * php BOT_DIR_PATH/collect_rotion.php your_email your_password
+10 6 * * * php BOT_DIR_PATH/admire.php your_email your_password
 ```
 
-Save file and forgot to collection ration :)
+Save file and forgot to collection ration and admire potions :)

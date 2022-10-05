@@ -18,7 +18,9 @@ if (!isset($argv[2])) {
 $client = new Client();
 $client->login($argv[1], $argv[2]);
 sleep(rand(1,3));
-echo "Collect ration start\n";
-$client->collectRation();
-echo "Collect ration end\n";
 
+$tournamentsIds = $client->currentSeason();
+foreach ($tournamentsIds as $tournamentsId) {
+    echo "Admire for tournament: " . $tournamentsId . "\n";
+    $client->admireTournament($tournamentsId);
+}
