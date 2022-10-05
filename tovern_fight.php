@@ -25,10 +25,12 @@ echo "Free beers: " . $details->getFreeBeers() . "\n";
 $leftBeers = $details->getFreeBeers();
 
 while ($leftBeers > 0) {
+    echo "Find new match.\n";
     $client->findMatch();
     sleep(rand(1,3));
     $battleResult = $client->battlePvP();
     $actions = count($battleResult['data']['combatActions']);
     $leftBeers = (int)$battleResult['data']['numFreeBeers'];
+    echo "Left beers: " .$leftBeers. ". Waiting: ".($actions * 4)."s.\n";
     sleep($actions * 4);
 }

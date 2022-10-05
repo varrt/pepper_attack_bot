@@ -128,7 +128,7 @@ class Client
     public function findMatch(): string
     {
         $response = $this->client->request(
-            'GET',
+            'POST',
             $this->url . "/pvp/find-match",
             [
                 'headers' => array_merge([
@@ -149,7 +149,7 @@ class Client
     public function battlePvP(): array
     {
         $response = $this->client->request(
-            'GET',
+            'POST',
             $this->url . "/pvp/battle9x9",
             [
                 'headers' => array_merge([
