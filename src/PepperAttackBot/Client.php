@@ -124,4 +124,48 @@ class Client
             return $tournament['id'];
         }, $data['data']['tournaments']);
     }
+
+    public function findMatch(): string
+    {
+        $response = $this->client->request(
+            'GET',
+            $this->url . "/pvp/find-match",
+            [
+                'headers' => array_merge([
+                    'authorization' => 'Bearer ' . $this->token
+                ], $this->headers)
+            ]
+        );
+
+        if ($response->getStatusCode() !== 201) {
+            echo "Error collect. Status code " . $response->getStatusCode() . "\n";
+        }
+
+        $data = json_decode($response->getContent(), true);
+
+        return $data['data']['matchUp']['id'];
+    }
+
+    public function battlePvP(): array
+    {
+        $response = $this->client->request(
+            'GET',
+            $this->url . "/pvp/battle9x9",
+            [
+                'headers' => array_merge([
+                    'authorization' => 'Bearer ' . $this->token
+                ], $this->headers)
+            ]
+        );
+
+        if ($response->getStatusCode() !== 201) {
+            echo "Error collect. Status code " . $response->getStatusCode() . "\n";
+        }
+
+        return json_decode($response->getContent(), true);
+    }
+
+
+
+
 }

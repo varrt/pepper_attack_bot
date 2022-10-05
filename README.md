@@ -1,6 +1,6 @@
 # Pepper Attack Bot
 
-Version: 0.2
+Version: 0.3
 
 ## Requirements
 
@@ -19,6 +19,7 @@ compsoer install
 ```shell
 php collect_rotion.php you_remail your_password
 php admire.php you_remail your_password
+php tovern_fight.php you_remail your_password
 ```
 
 Bot doesn't write your password or email anywhere. It's use only for login to PepperAttack game.
@@ -52,6 +53,7 @@ And you append a line on end of file
 ```shell
 10 */6 * * * php BOT_DIR_PATH/collect_rotion.php your_email your_password
 10 6 * * * php BOT_DIR_PATH/admire.php your_email your_password
+10 9 * * * php BOT_DIR_PATH/tovern_fight.php your_email your_password
 ```
 
 Save file and forgot to collection ration and admire potions :)
