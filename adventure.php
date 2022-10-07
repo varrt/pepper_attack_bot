@@ -94,10 +94,10 @@ while($inventory->getRation() >= 100) {
     foreach ($rewards as $reward) {
         if ($reward['code'] == 'hp_potion') {
             $inventory->addPotions((int)$reward['value']);
-            echo "You win x" . (int)$reward['value'] . " Heal Potions.\n";
+            echo "You got x" . (int)$reward['value'] . " Heal Potions.\n";
         }
         if ($reward['code'] == 'stim') {
-            echo "You win x" . (int)$reward['value'] . " Stims.\n";
+            echo "You got x" . (int)$reward['value'] . " Stims.\n";
         }
     }
 
