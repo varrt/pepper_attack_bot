@@ -55,7 +55,7 @@ function healPeppers(Client $client, Inventory $inventory, int $defaultHealPoint
         while ($pepper->getMaxHP() - $pepper->getCurrentHP() >= $defaultHealPointsLeft) {
             $isHealed = $client->healPepper($pepper->getId());
             if ($isHealed) {
-                echo "Healed pepper ". $pepper->getId()."(". ($pepper->getCurrentHP()+100). "/" .$pepper->getMaxHP()."HP)\n";
+                echo "Healed pepper ". $pepper->getId()." (". (min($pepper->getCurrentHP()+100, $pepper->getMaxHP())). "/" .$pepper->getMaxHP()."HP)\n";
                 $healedTimes++;
                 $pepper->heal();
                 $inventory->usePotion();
@@ -86,12 +86,18 @@ while($inventory->getRation() >= 100) {
 
     if ((int)$battleResult['data']['totalExp'] > 0) {
         echo "Win! (".(int)$battleResult['data']['totalExp']."EXP)\n";
+    } else {
+        echo "Lost!";
     }
 
     $rewards = $battleResult['data']['rewards'];
     foreach ($rewards as $reward) {
         if ($reward['code'] == 'hp_potion') {
             $inventory->addPotions((int)$reward['value']);
+            echo "You win x" . (int)$reward['value'] . " Heal Potions.\n";
+        }
+        if ($reward['code'] == 'stim') {
+            echo "You win x" . (int)$reward['value'] . " Stims.\n";
         }
     }
 

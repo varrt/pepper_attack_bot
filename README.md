@@ -1,6 +1,6 @@
 # Pepper Attack Bot
 
-Version: 0.4
+Version: 0.4.2
 
 ## Requirements
 
