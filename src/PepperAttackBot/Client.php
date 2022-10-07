@@ -6,6 +6,8 @@ namespace PepperAttackBot;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\HttpClient\HttpClient;
 use PepperAttackBot\Model\Details;
+use PepperAttackBot\Model\Inventory;
+use PepperAttackBot\Model\Pepper;
 
 class Client
 {
@@ -61,7 +63,7 @@ class Client
         );
 
         if ($response->getStatusCode() !== 201) {
-            echo "Error collect. Status code " . $response->getStatusCode(). "\n";
+            echo "Error call. Status code " . $response->getStatusCode(). "\n";
         }
     }
 
@@ -78,7 +80,7 @@ class Client
         );
 
         if ($response->getStatusCode() !== 200) {
-            echo "Error collect. Status code " . $response->getStatusCode(). "\n";
+            echo "Error call. Status code " . $response->getStatusCode(). "\n";
         }
 
         $data = json_decode($response->getContent(), true);
@@ -98,7 +100,7 @@ class Client
         );
 
         if ($response->getStatusCode() !== 200) {
-            echo "Error collect. Status code " . $response->getStatusCode(). "\n";
+            echo "Error call. Status code " . $response->getStatusCode(). "\n";
         }
     }
 
@@ -115,7 +117,7 @@ class Client
         );
 
         if ($response->getStatusCode() !== 200) {
-            echo "Error collect. Status code " . $response->getStatusCode() . "\n";
+            echo "Error call. Status code " . $response->getStatusCode() . "\n";
         }
 
         $data = json_decode($response->getContent(), true);
@@ -138,7 +140,7 @@ class Client
         );
 
         if ($response->getStatusCode() !== 201) {
-            echo "Error collect. Status code " . $response->getStatusCode() . "\n";
+            echo "Error call. Status code " . $response->getStatusCode() . "\n";
         }
 
         $data = json_decode($response->getContent(), true);
@@ -159,13 +161,130 @@ class Client
         );
 
         if ($response->getStatusCode() !== 201) {
-            echo "Error collect. Status code " . $response->getStatusCode() . "\n";
+            echo "Error call. Status code " . $response->getStatusCode() . "\n";
         }
 
         return json_decode($response->getContent(), true);
     }
 
+    public function getInventory(): Inventory
+    {
+        $potionItemId = '87f03c4e-596e-44a9-b1fb-8de42a256b4c';
+        $rationItemId = 'fa13abbc-2eb8-4f38-afdc-ae00d8e79325';
+        $stimItemId = '83eb57cc-a4d2-475a-98c7-b02d71134958';
 
+        $response = $this->client->request(
+            'GET',
+            $this->url . "/inventory",
+            [
+                'headers' => array_merge([
+                    'authorization' => 'Bearer ' . $this->token
+                ], $this->headers)
+            ]
+        );
 
+        if ($response->getStatusCode() !== 200) {
+            echo "Error call. Status code " . $response->getStatusCode() . "\n";
+        }
 
+        $data = json_decode($response->getContent(), true);
+
+        $items = $data['data']['user_items'];
+
+        $potionCnt = 0;
+        $stimCnt = 0;
+        $rationCnt = 0;
+        foreach ($items as $item) {
+            if ($item['item_id'] == $potionItemId) {
+                $potionCnt = (int)$item['quantity'];
+            }
+            if ($item['item_id'] == $stimItemId) {
+                $stimCnt = (int)$item['quantity'];
+            }
+            if ($item['item_id'] == $rationItemId) {
+                $rationCnt = (int)$item['quantity'];
+            }
+        }
+
+        return new Inventory($rationCnt, $stimCnt, $potionCnt);
+    }
+
+    public function healPepper(string $pepperId): bool
+    {
+        $response = $this->client->request(
+            'POST',
+            $this->url . "/inventory/hp/use",
+            [
+                'headers' => array_merge([
+                    'authorization' => 'Bearer ' . $this->token,
+                    'content-type' => 'application/json'
+                ], $this->headers),
+                'json' => [
+                    'pepper_id' => $pepperId,
+                    'to_max' => false
+                ]
+            ]
+        );
+
+        if ($response->getStatusCode() !== 201) {
+            echo "Error heal peppers. Status code " . $response->getStatusCode() . "\n";
+            return false;
+        }
+        return true;
+    }
+
+    public function getPeppers(): array
+    {
+        $response = $this->client->request(
+            'GET',
+            $this->url . "/peppers/my-peppers",
+            [
+                'headers' => array_merge([
+                    'authorization' => 'Bearer ' . $this->token
+                ], $this->headers)
+            ]
+        );
+
+        if ($response->getStatusCode() !== 200) {
+            echo "Error get peppers. Status code " . $response->getStatusCode() . "\n";
+        }
+
+        $data = json_decode($response->getContent(), true);
+
+        $peppersRawData = $data['data']['peppers'];
+
+        $peppers = [];
+        foreach ($peppersRawData as $pepper) {
+            $peppers[] = new Pepper(
+                $pepper['pepper_id'],
+                $pepper['current_hp'],
+                Pepper::calculateMaxHP((int)$pepper['pepper']['pepper_info']['vit'], (int)$pepper['temp_vit'])
+            );
+        }
+        return $peppers;
+    }
+
+    public function battlePvE(int $mapId, int $stageId): array
+    {
+        $response = $this->client->request(
+            'POST',
+            $this->url . "/pve/battle9x9",
+            [
+                'headers' => array_merge([
+                    'authorization' => 'Bearer ' . $this->token,
+                    'content-type' => 'application/json'
+                ], $this->headers),
+                'json' => [
+                    'map_id' => $mapId,
+                    'stage_id' => $stageId
+                ]
+            ]
+        );
+
+        if ($response->getStatusCode() !== 201) {
+            echo "Error call battle. Status code " . $response->getStatusCode() . "\n";
+        }
+
+        return json_decode($response->getContent(), true);
+    }
 }
