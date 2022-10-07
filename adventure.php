@@ -26,6 +26,13 @@ if (!isset($argv[4])) {
     exit;
 }
 
+$defaultHealPointsLeft = 50;
+if (!isset($argv[5])) {
+    echo "Default heal points left set to 50.\n";
+} else {
+    $defaultHealPointsLeft = (int)$argv[5];
+}
+
 $client = new Client();
 $client->login($argv[1], $argv[2]);
 sleep(rand(1,3));
@@ -33,7 +40,7 @@ sleep(rand(1,3));
 $inventory = $client->getInventory();
 echo "Rations: " . $inventory->getRation() . "\n";
 
-function healPeppers(Client $client, Inventory $inventory) {
+function healPeppers(Client $client, Inventory $inventory, int $defaultHealPointsLeft) {
 
     /** @var \PepperAttackBot\Model\Pepper[] $peppers */
     $peppers = $client->getPeppers();
@@ -45,7 +52,7 @@ function healPeppers(Client $client, Inventory $inventory) {
 
     foreach ($peppers as $pepper) {
         $healedTimes = 0;
-        while ($pepper->getMaxHP() - $pepper->getCurrentHP() > 50) {
+        while ($pepper->getMaxHP() - $pepper->getCurrentHP() >= $defaultHealPointsLeft) {
             $isHealed = $client->healPepper($pepper->getId());
             if ($isHealed) {
                 echo "Healed pepper ". $pepper->getId()."(". ($pepper->getCurrentHP()+100). "/" .$pepper->getMaxHP()."HP)\n";
@@ -66,7 +73,7 @@ function healPeppers(Client $client, Inventory $inventory) {
 }
 
 echo "Heal peppers:\n";
-healPeppers($client, $inventory);
+healPeppers($client, $inventory, $defaultHealPointsLeft);
 
 $mapId = (int)$argv[3];
 $stageId = (int)$argv[4];
@@ -88,7 +95,7 @@ while($inventory->getRation() >= 100) {
         }
     }
 
-    healPeppers($client, $inventory);
+    healPeppers($client, $inventory, $defaultHealPointsLeft);
 
     echo "Left rations: " .$inventory->getRation(). ". Waiting: ".($actions * 4)."s.\n";
     sleep($actions * 4);

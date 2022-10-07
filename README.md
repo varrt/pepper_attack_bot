@@ -20,9 +20,18 @@ compsoer install
 php collect_rotion.php you_remail your_password
 php admire.php you_remail your_password
 php tovern_fight.php you_remail your_password
-php adventure.php you_remail your_password map_id stage_id
+php adventure.php you_remail your_password map_id stage_id heal_hp_left<optional>
 ```
 
+# Adventure mod
+- map_id - it's first number in your current stage (displayed on screen). Example: Stage 2-1 your map_id = 2
+- stage_id - it's second number in your current state (displayed on screen) plus map_id multiple 10. Example: Stage 3-2 your stage_id = 32  
+- heal_hp_left - it's max health points left after healing your peppers. 
+  - Example1: Your pepper has max HP 160 and his current HP is 140, and you set heal_hp_left on 50 than your pepper will not be healed.
+  - Example2: Your pepper has max HP 160 and his current HP is 140, and you set heal_hp_left on 20 than your pepper will be healed.
+- 
+
+ 
 Bot doesn't write your password or email anywhere. It's use only for login to PepperAttack game.
 
 # Donate
@@ -55,7 +64,7 @@ And you append a line on end of file
 10 */6 * * * php BOT_DIR_PATH/collect_rotion.php your_email your_password
 0 6 * * * php BOT_DIR_PATH/admire.php your_email your_password
 0 9 * * * php BOT_DIR_PATH/tovern_fight.php your_email your_password
-0 11 */2 * * php BOT_DIR_PATH/tovern_fight.php your_email your_password map_id stage_id
+0 11 */2 * * php BOT_DIR_PATH/tovern_fight.php your_email your_password map_id stage_id hp_left_points<optional>
 ```
 
 Save file and forgot to collection ration and admire potions :)
