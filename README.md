@@ -25,7 +25,7 @@ php adventure.php you_remail your_password map_id stage_id heal_hp_left<optional
 
 # Adventure mod
 - map_id - it's first number in your current stage (displayed on screen). Example: Stage 2-1 your map_id = 2
-- stage_id - it's second number in your current state (displayed on screen) plus map_id multiple 10. Example: Stage 3-2 your stage_id = 32  
+- stage_id - it's second number in your current state (displayed on screen) plus map_id multiple 10 minus 10. Example: Stage 3-2 your stage_id = 22  
 - heal_hp_left - it's max health points left after healing your peppers. 
   - Example1: Your pepper has max HP 160 and his current HP is 140, and you set heal_hp_left on 50 than your pepper will not be healed.
   - Example2: Your pepper has max HP 160 and his current HP is 140, and you set heal_hp_left on 20 than your pepper will be healed.
