@@ -85,19 +85,19 @@ while($inventory->getRation() >= 100) {
     $inventory->consumeRation((int)$battleResult['data']['rationCost']);
 
     if ((int)$battleResult['data']['totalExp'] > 0) {
-        echo "\033[32m Win! (".(int)$battleResult['data']['totalExp']."EXP) \033[37m \n";
+        echo "\033[32mWin! (".(int)$battleResult['data']['totalExp']."EXP) \033[37m \n";
     } else {
-        echo "\033[31m Lost! \033[37m \n";
+        echo "\033[31mLost! \033[37m \n";
     }
 
     $rewards = $battleResult['data']['rewards'];
     foreach ($rewards as $reward) {
         if ($reward['code'] == 'hp_potion') {
             $inventory->addPotions((int)$reward['value']);
-            echo "\033[93m You got x" . (int)$reward['value'] . " Heal Potions. \033[37m \n";
+            echo "\033[93mYou got x" . (int)$reward['value'] . " Heal Potions. \033[37m \n";
         }
         if ($reward['code'] == 'stim') {
-            echo "\033[95m You got x" . (int)$reward['value'] . " Stims. \033[37m \n";
+            echo "\033[95mYou got x" . (int)$reward['value'] . " Stims. \033[37m \n";
         }
     }
 
