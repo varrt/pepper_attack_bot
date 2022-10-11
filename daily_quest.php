@@ -6,7 +6,7 @@ use PepperAttackBot\Client;
 require __DIR__.'/vendor/autoload.php';
 
 echo "--------------------------------------------------------------------------------------";
-echo "Start at: " . date("Y-m-d H:i:s")
+echo "Start at: " . date("Y-m-d H:i:s");
 echo "--------------------------------------------------------------------------------------";
 
 if (!isset($argv[1])) {
@@ -37,5 +37,5 @@ foreach ($quests as $quest) {
 $client->claimDailyQuests($toClaim);
 
 echo "--------------------------------------------------------------------------------------";
-echo "End at: " . date("Y-m-d H:i:s")
+echo "End at: " . date("Y-m-d H:i:s");
 echo "--------------------------------------------------------------------------------------";
