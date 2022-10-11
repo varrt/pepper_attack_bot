@@ -6,6 +6,10 @@ use PepperAttackBot\Model\Inventory;
 
 require __DIR__.'/vendor/autoload.php';
 
+echo "--------------------------------------------------------------------------------------";
+echo "Start at: " . date("Y-m-d H:i:s")
+echo "--------------------------------------------------------------------------------------";
+
 if (!isset($argv[1])) {
     echo "You must provide an email as first argument.\n";
     exit;
@@ -106,3 +110,7 @@ while($inventory->getRation() >= 100) {
     echo "Left rations: " .$inventory->getRation(). ". Waiting: ".($actions * 4)."s.\n";
     sleep($actions * 4);
 }
+
+echo "--------------------------------------------------------------------------------------";
+echo "End at: " . date("Y-m-d H:i:s")
+echo "--------------------------------------------------------------------------------------";

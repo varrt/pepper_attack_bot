@@ -5,6 +5,10 @@ use PepperAttackBot\Client;
 
 require __DIR__.'/vendor/autoload.php';
 
+echo "--------------------------------------------------------------------------------------";
+echo "Start at: " . date("Y-m-d H:i:s")
+echo "--------------------------------------------------------------------------------------";
+
 if (!isset($argv[1])) {
     echo "You must provide an email as first argument.\n";
     exit;
@@ -22,3 +26,7 @@ sleep(rand(1,3));
 echo "Collect ration start\n";
 $client->collectRation();
 echo "Collect ration end\n";
+
+echo "--------------------------------------------------------------------------------------";
+echo "End at: " . date("Y-m-d H:i:s")
+echo "--------------------------------------------------------------------------------------";

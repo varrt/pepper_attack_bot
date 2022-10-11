@@ -287,4 +287,48 @@ class Client
 
         return json_decode($response->getContent(), true);
     }
+
+    public function getDailyQuests(): array
+    {
+        $response = $this->client->request(
+            'GET',
+            $this->url . "/daily-quest/all",
+            [
+                'headers' => array_merge([
+                    'authorization' => 'Bearer ' . $this->token
+                ], $this->headers)
+            ]
+        );
+
+        if ($response->getStatusCode() !== 200) {
+            echo "Error get peppers. Status code " . $response->getStatusCode() . "\n";
+        }
+
+        $data = json_decode($response->getContent(), true);
+
+        return $data['data']['dailyQuests'];
+    }
+
+    public function claimDailyQuests(array $dailyQuests): void
+    {
+        $response = $this->client->request(
+            'POST',
+            $this->url . "/daily-quest/claim/quest",
+            [
+                'headers' => array_merge([
+                    'authorization' => 'Bearer ' . $this->token,
+                    'content-type' => 'application/json'
+                ], $this->headers),
+                'json' => [
+                    'quest_ids' => $dailyQuests
+                ]
+            ]
+        );
+
+        print_r($response->getContent());
+
+        if ($response->getStatusCode() !== 201) {
+            echo "Error claim. Status code " . $response->getStatusCode() . "\n";
+        }
+    }
 }

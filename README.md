@@ -1,6 +1,6 @@
 # Pepper Attack Bot
 
-Version: 0.4.4
+Version: 0.5
 
 ## Requirements
 
@@ -21,6 +21,7 @@ php collect_rotion.php you_remail your_password
 php admire.php you_remail your_password
 php tovern_fight.php you_remail your_password
 php adventure.php you_remail your_password map_id stage_id heal_hp_left<optional>
+php daily_quest.php you_remail your_password
 ```
 
 # Adventure mod
@@ -65,6 +66,7 @@ And you append a line on end of file
 0 6 * * * php BOT_DIR_PATH/admire.php your_email your_password
 0 9 * * * php BOT_DIR_PATH/tovern_fight.php your_email your_password
 0 11 */2 * * php BOT_DIR_PATH/tovern_fight.php your_email your_password map_id stage_id hp_left_points<optional>
+0 22 * * * php BOT_DIR_PATH/daily_quest.php your_email your_password
 ```
 
 Save file and forgot to collection ration and admire potions :)

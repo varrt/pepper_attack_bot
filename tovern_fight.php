@@ -5,6 +5,10 @@ use PepperAttackBot\Client;
 
 require __DIR__.'/vendor/autoload.php';
 
+echo "--------------------------------------------------------------------------------------";
+echo "Start at: " . date("Y-m-d H:i:s")
+echo "--------------------------------------------------------------------------------------";
+
 if (!isset($argv[1])) {
     echo "You must provide an email as first argument.\n";
     exit;
@@ -34,3 +38,8 @@ while ($leftBeers > 0) {
     echo "Left beers: " .$leftBeers. ". Waiting: ".($actions * 4)."s.\n";
     sleep($actions * 4);
 }
+
+
+echo "--------------------------------------------------------------------------------------";
+echo "End at: " . date("Y-m-d H:i:s")
+echo "--------------------------------------------------------------------------------------";

@@ -4,6 +4,7 @@ declare(strict_types=1);
 use PepperAttackBot\Client;
 
 require __DIR__.'/vendor/autoload.php';
+
 echo "--------------------------------------------------------------------------------------";
 echo "Start at: " . date("Y-m-d H:i:s")
 echo "--------------------------------------------------------------------------------------";
@@ -22,11 +23,18 @@ $client = new Client();
 $client->login($argv[1], $argv[2]);
 sleep(rand(1,3));
 
-$tournamentsIds = $client->currentSeason();
-foreach ($tournamentsIds as $tournamentsId) {
-    echo "Admire for tournament: " . $tournamentsId . "\n";
-    $client->admireTournament($tournamentsId);
+
+$quests = $client->getDailyQuests();
+
+$toClaim = [];
+
+foreach ($quests as $quest) {
+    if($quest['isCompleted'] == 1 && $quest['isClaimed'] != 1) {
+        $toClaim[] = $quest['id'];
+    }
 }
+
+$client->claimDailyQuests($toClaim);
 
 echo "--------------------------------------------------------------------------------------";
 echo "End at: " . date("Y-m-d H:i:s")
