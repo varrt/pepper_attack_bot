@@ -325,7 +325,26 @@ class Client
             ]
         );
 
-        print_r($response->getContent());
+        if ($response->getStatusCode() !== 201) {
+            echo "Error claim. Status code " . $response->getStatusCode() . "\n";
+        }
+    }
+
+    public function claimRewards(int $level): void
+    {
+        $response = $this->client->request(
+            'POST',
+            $this->url . "/daily-quest/claim/tier",
+            [
+                'headers' => array_merge([
+                    'authorization' => 'Bearer ' . $this->token,
+                    'content-type' => 'application/json'
+                ], $this->headers),
+                'json' => [
+                    'tier_level' => (string)$level
+                ]
+            ]
+        );
 
         if ($response->getStatusCode() !== 201) {
             echo "Error claim. Status code " . $response->getStatusCode() . "\n";

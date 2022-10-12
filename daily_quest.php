@@ -30,11 +30,17 @@ $toClaim = [];
 
 foreach ($quests as $quest) {
     if($quest['isCompleted'] == 1 && $quest['isClaimed'] != 1) {
+        echo "Claim quest: ". $quest['id'] . "\n";
         $toClaim[] = $quest['id'];
     }
 }
 
 $client->claimDailyQuests($toClaim);
+
+for($i=1;$i<=4;$i++) {
+    echo "Claim reward: ". $i . "\n";
+    $client->claimRewards($i);
+}
 
 echo "--------------------------------------------------------------------------------------\n";
 echo "End at: " . date("Y-m-d H:i:s")."\n";
