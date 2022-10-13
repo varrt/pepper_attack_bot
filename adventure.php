@@ -10,6 +10,7 @@ echo "--------------------------------------------------------------------------
 echo "Start at: " . date("Y-m-d H:i:s")."\n";
 echo "--------------------------------------------------------------------------------------\n";
 
+
 if (!isset($argv[1])) {
     echo "You must provide an email as first argument.\n";
     exit;
@@ -19,6 +20,8 @@ if (!isset($argv[2])) {
     echo "You must provide a password as second argument\n";
     exit;
 }
+
+echo "Account: ". $argv[1].".\n";
 
 if (!isset($argv[3])) {
     echo "You must provide a map id\n";

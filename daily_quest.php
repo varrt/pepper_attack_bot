@@ -19,6 +19,8 @@ if (!isset($argv[2])) {
     exit;
 }
 
+echo "Account: ". $argv[1].".\n";
+
 $client = new Client();
 $client->login($argv[1], $argv[2]);
 sleep(rand(1,3));
