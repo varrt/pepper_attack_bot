@@ -61,14 +61,14 @@ function healPeppers(Client $client, Inventory $inventory, int $defaultHealPoint
         $healedTimes = 0;
         while ($pepper->getMaxHP() - $pepper->getCurrentHP() >= $defaultHealPointsLeft) {
             $isHealed = $client->healPepper($pepper->getId());
+            $healedTimes++;
             if ($isHealed) {
                 echo "Healed pepper ". $pepper->getId()." (". (min($pepper->getCurrentHP()+100, $pepper->getMaxHP())). "/" .$pepper->getMaxHP()."HP)\n";
-                $healedTimes++;
                 $pepper->heal();
                 $inventory->usePotion();
             }
 
-            if ($healedTimes > 5) {
+            if ($healedTimes > 10) {
                 break;
             }
             sleep(1);
