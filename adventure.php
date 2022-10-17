@@ -46,16 +46,16 @@ sleep(rand(1,3));
 
 $inventory = $client->getInventory();
 echo "Rations: " . $inventory->getRation() . "\n";
+echo "Potions: ". $inventory->getPotions()."\n";
 
 function healPeppers(Client $client, Inventory $inventory, int $defaultHealPointsLeft) {
-
-    /** @var \PepperAttackBot\Model\Pepper[] $peppers */
-    $peppers = $client->getPeppers();
-
     if ($inventory->getPotions() == 0) {
         echo "Not enough potions".
         exit;
     }
+
+    /** @var \PepperAttackBot\Model\Pepper[] $peppers */
+    $peppers = $client->getPeppers();
 
     foreach ($peppers as $pepper) {
         $healedTimes = 0;
