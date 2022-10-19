@@ -31,6 +31,11 @@ echo "Rations: " . $inventory->getRation() . "\n";
 echo "Potions: ". $inventory->getPotions()."\n";
 echo "Stim: " . $inventory->getStim()."\n";
 
+$tournaments = $client->currentSeason();
+foreach ($tournaments as $tournament) {
+    $rank = $client->getMyRank($tournament);
+    echo "Tournament " . $tournament . " rank: ".$rank."\n";
+}
 
 echo "--------------------------------------------------------------------------------------\n";
 echo "End at: " . date("Y-m-d H:i:s")."\n";

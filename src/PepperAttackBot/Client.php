@@ -350,4 +350,25 @@ class Client
             echo "Error claim. Status code " . $response->getStatusCode() . "\n";
         }
     }
+
+    public function getMyRank(string $tournament): int
+    {
+        $response = $this->client->request(
+            'GET',
+            $this->url . "/leaderboard/tournament/".$tournament,
+            [
+                'headers' => array_merge([
+                    'authorization' => 'Bearer ' . $this->token
+                ], $this->headers)
+            ]
+        );
+
+        if ($response->getStatusCode() !== 200) {
+            echo "Error get peppers. Status code " . $response->getStatusCode() . "\n";
+        }
+
+        $data = json_decode($response->getContent(), true);
+
+        return (int)$data['data']['myRank'];
+    }
 }
