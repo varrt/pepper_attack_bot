@@ -30,6 +30,8 @@ $inventory = $client->getInventory();
 echo "Rations: " . $inventory->getRation() . "\n";
 echo "Potions: ". $inventory->getPotions()."\n";
 echo "Stim: " . $inventory->getStim()."\n";
+$details = $client->getDetails();
+echo "Free beers: " . $details->getFreeBeers() . "\n";
 
 $tournaments = $client->currentSeason();
 foreach ($tournaments as $tournament) {

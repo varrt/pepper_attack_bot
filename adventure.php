@@ -48,6 +48,15 @@ $inventory = $client->getInventory();
 echo "Rations: " . $inventory->getRation() . "\n";
 echo "Potions: ". $inventory->getPotions()."\n";
 
+
+if ($inventory->getRation() < 4000) {
+    echo "Waiting for 4k ration\n";
+    echo "--------------------------------------------------------------------------------------\n";
+    echo "End at: " . date("Y-m-d H:i:s")."\n";
+    echo "--------------------------------------------------------------------------------------\n";
+    exit;
+}
+
 function healPeppers(Client $client, Inventory $inventory, int $defaultHealPointsLeft) {
     if ($inventory->getPotions() == 0) {
         echo "Not enough potions".
