@@ -40,6 +40,13 @@ if (!isset($argv[5])) {
     $defaultHealPointsLeft = (int)$argv[5];
 }
 
+$minRations = 4000;
+if (!isset($argv[6])) {
+    echo "Min rations set to 4000.\n";
+} else {
+    $minRations = (int)$argv[6];
+}
+
 $client = new Client();
 $client->login($argv[1], $argv[2]);
 sleep(rand(1,3));
@@ -49,8 +56,8 @@ echo "Rations: " . $inventory->getRation() . "\n";
 echo "Potions: ". $inventory->getPotions()."\n";
 
 
-if ($inventory->getRation() < 4000) {
-    echo "Waiting for 4k ration\n";
+if ($inventory->getRation() < $minRations) {
+    echo "Waiting for $minRations rations\n";
     echo "--------------------------------------------------------------------------------------\n";
     echo "End at: " . date("Y-m-d H:i:s")."\n";
     echo "--------------------------------------------------------------------------------------\n";
