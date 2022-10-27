@@ -36,7 +36,9 @@ while ($leftBeers > 0) {
     sleep(rand(1,3));
     $battleResult = $client->battlePvP();
     $actions = count($battleResult['data']['combatActions']);
-    $leftBeers = (int)$battleResult['data']['numFreeBeers'];
+    sleep(rand(1,3));
+    $inventory = $client->getInventory();
+    $leftBeers = (int)$battleResult['data']['numFreeBeers'] + $inventory->getBeerTickets();
     echo "Left beers: " .$leftBeers. ". Waiting: ".($actions * 4)."s.\n";
     sleep($actions * 4);
 }
