@@ -35,7 +35,11 @@ echo "Treasure Hun Roll \n";
 $inventory = $client->getInventory();
 while ($inventory->getCrowCnt() > 0) {
     $roll = $client->treasureHuntRoll();
-    echo "You won x". $roll['data']['nextPos']['qty'] . " " . $roll['data']['nextPos']['code'] . "\n";
+    if (isset($roll['data']['nextPos']['qty'])) {
+        echo "You won x". $roll['data']['nextPos']['qty'] . " " . $roll['data']['nextPos']['code'] . "\n";
+    } else {
+        echo "You roll.\n";
+    }
     $inventory->consumeCrow();
     sleep(rand(1,3));
 }
