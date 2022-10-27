@@ -99,7 +99,7 @@ class Client
             ]
         );
 
-        if ($response->getStatusCode() !== 201) {
+        if ($response->getStatusCode() !== 200) {
             echo "Error call. Status code " . $response->getStatusCode(). "\n";
         }
     }
