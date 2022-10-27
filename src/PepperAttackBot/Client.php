@@ -127,7 +127,7 @@ class Client
         }, $data['data']['tournaments']);
     }
 
-    public function findMatch(): string
+    public function findMatch(): ?string
     {
         $response = $this->client->request(
             'POST',
@@ -145,6 +145,10 @@ class Client
 
         $data = json_decode($response->getContent(), true);
 
+        if (isset($data['msg']) && $data['msg'] === 'PVP_MATCHES_LIMIT_EXCEEDED') {
+            return null;
+        }
+
         return $data['data']['matchUp']['id'];
     }
 
@@ -160,7 +164,7 @@ class Client
             ]
         );
 
-        if ($response->getStatusCode() !== 201) {
+        if ($response->getStatusCode() !== 201 || $response->getStatusCode() !== 200) {
             echo "Error call. Status code " . $response->getStatusCode() . "\n";
         }
 

@@ -32,7 +32,11 @@ $leftBeers = $details->getFreeBeers() + $inventory->getBeerTickets();
 
 while ($leftBeers > 0) {
     echo "Find new match.\n";
-    $client->findMatch();
+    $matchId = $client->findMatch();
+    if (!$matchId) {
+        echo "Limit Exceeded.\n";
+        break;
+    }
     sleep(rand(1,3));
     $battleResult = $client->battlePvP();
     $actions = count($battleResult['data']['combatActions']);
