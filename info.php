@@ -30,6 +30,8 @@ $inventory = $client->getInventory();
 echo "Rations: " . $inventory->getRation() . "\n";
 echo "Potions: ". $inventory->getPotions()."\n";
 echo "Stim: " . $inventory->getStim()."\n";
+echo "Crows: " . $inventory->getCrowCnt()."\n";
+echo "Beer tickets: " . $inventory->getBeerTickets()."\n";
 $details = $client->getDetails();
 echo "Free beers: " . $details->getFreeBeers() . "\n";
 

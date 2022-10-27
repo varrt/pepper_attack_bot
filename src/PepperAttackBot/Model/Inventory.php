@@ -9,7 +9,8 @@ class Inventory
         private int $ration,
         private int $stim,
         private int $potions,
-        private int $crowCnt
+        private int $crowCnt,
+        private int $beerTickets
     )
     {
 
@@ -53,5 +54,10 @@ class Inventory
     public function usePotion(): void
     {
         $this->potions--;
+    }
+
+    public function getBeerTickets(): int
+    {
+        return $this->beerTickets;
     }
 }

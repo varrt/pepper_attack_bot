@@ -44,7 +44,7 @@ class Client
 
         );
         if ($response->getStatusCode() !== 201) {
-            echo "Error login. Status code " . $response->getStatusCode(). "\n";
+            echo "Error login. Status code " . $response->getStatusCode() . "\n";
         }
         $data = json_decode($response->getContent(), true);
         $this->token = $data['data']['token'];
@@ -63,7 +63,7 @@ class Client
         );
 
         if ($response->getStatusCode() !== 201) {
-            echo "Error call. Status code " . $response->getStatusCode(). "\n";
+            echo "Error call. Status code " . $response->getStatusCode() . "\n";
         }
     }
 
@@ -80,7 +80,7 @@ class Client
         );
 
         if ($response->getStatusCode() !== 200) {
-            echo "Error call. Status code " . $response->getStatusCode(). "\n";
+            echo "Error call. Status code " . $response->getStatusCode() . "\n";
         }
 
         $data = json_decode($response->getContent(), true);
@@ -100,7 +100,7 @@ class Client
         );
 
         if ($response->getStatusCode() !== 200 || $response->getStatusCode() !== 201) {
-            echo "Error call. Status code " . $response->getStatusCode(). "\n";
+            echo "Error call. Status code " . $response->getStatusCode() . "\n";
         }
     }
 
@@ -173,6 +173,7 @@ class Client
         $rationItemId = 'fa13abbc-2eb8-4f38-afdc-ae00d8e79325';
         $stimItemId = '83eb57cc-a4d2-475a-98c7-b02d71134958';
         $crowId = 'fc51eb89-23ca-4c86-bdfa-81632e938278';
+        $beerId = '561b901b-8b33-4b29-b2b6-e15d674fafd3';
 
         $response = $this->client->request(
             'GET',
@@ -196,22 +197,22 @@ class Client
         $stimCnt = 0;
         $rationCnt = 0;
         $crowCnt = 0;
+        $beerCnt = 0;
         foreach ($items as $item) {
             if ($item['item_id'] == $potionItemId) {
                 $potionCnt = (int)$item['quantity'];
-            }
-            if ($item['item_id'] == $stimItemId) {
+            } elseif ($item['item_id'] == $stimItemId) {
                 $stimCnt = (int)$item['quantity'];
-            }
-            if ($item['item_id'] == $rationItemId) {
+            } elseif ($item['item_id'] == $rationItemId) {
                 $rationCnt = (int)$item['quantity'];
-            }
-            if ($item['item_id'] == $crowId) {
+            } elseif ($item['item_id'] == $crowId) {
                 $crowCnt = (int)$item['quantity'];
+            } elseif ($item['item_id'] == $beerId) {
+                $beerCnt = (int)$item['quantity'];
             }
         }
 
-        return new Inventory($rationCnt, $stimCnt, $potionCnt, $crowCnt);
+        return new Inventory($rationCnt, $stimCnt, $potionCnt, $crowCnt, $beerCnt);
     }
 
     public function healPepper(string $pepperId): bool
@@ -360,7 +361,7 @@ class Client
     {
         $response = $this->client->request(
             'GET',
-            $this->url . "/leaderboard/tournament/".$tournament,
+            $this->url . "/leaderboard/tournament/" . $tournament,
             [
                 'headers' => array_merge([
                     'authorization' => 'Bearer ' . $this->token
@@ -380,14 +381,14 @@ class Client
     public function treasureHuntRoll()
     {
         $response = $this->client->request(
-                'POST',
-                $this->url . "/treasure-hunt/roll",
-                [
-                    'headers' => array_merge([
-                        'authorization' => 'Bearer ' . $this->token
-                    ], $this->headers)
-                ]
-            );
+            'POST',
+            $this->url . "/treasure-hunt/roll",
+            [
+                'headers' => array_merge([
+                    'authorization' => 'Bearer ' . $this->token
+                ], $this->headers)
+            ]
+        );
 
         if ($response->getStatusCode() !== 201) {
             echo "Error get peppers. Status code " . $response->getStatusCode() . "\n";

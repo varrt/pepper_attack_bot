@@ -24,9 +24,11 @@ $client->login($argv[1], $argv[2]);
 sleep(rand(1,3));
 
 $details = $client->getDetails();
+$inventory = $client->getInventory();
 echo "Free beers: " . $details->getFreeBeers() . "\n";
+echo "Beers tickets: " . $inventory->getBeerTickets() . "\n";
 
-$leftBeers = $details->getFreeBeers();
+$leftBeers = $details->getFreeBeers() + $inventory->getBeerTickets();
 
 while ($leftBeers > 0) {
     echo "Find new match.\n";
