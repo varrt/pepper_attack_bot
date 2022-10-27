@@ -172,6 +172,7 @@ class Client
         $potionItemId = '87f03c4e-596e-44a9-b1fb-8de42a256b4c';
         $rationItemId = 'fa13abbc-2eb8-4f38-afdc-ae00d8e79325';
         $stimItemId = '83eb57cc-a4d2-475a-98c7-b02d71134958';
+        $crowId = 'fc51eb89-23ca-4c86-bdfa-81632e938278';
 
         $response = $this->client->request(
             'GET',
@@ -194,6 +195,7 @@ class Client
         $potionCnt = 0;
         $stimCnt = 0;
         $rationCnt = 0;
+        $crowCnt = 0;
         foreach ($items as $item) {
             if ($item['item_id'] == $potionItemId) {
                 $potionCnt = (int)$item['quantity'];
@@ -204,9 +206,12 @@ class Client
             if ($item['item_id'] == $rationItemId) {
                 $rationCnt = (int)$item['quantity'];
             }
+            if ($item['item_id'] == $crowId) {
+                $crowCnt = (int)$item['quantity'];
+            }
         }
 
-        return new Inventory($rationCnt, $stimCnt, $potionCnt);
+        return new Inventory($rationCnt, $stimCnt, $potionCnt, $crowCnt);
     }
 
     public function healPepper(string $pepperId): bool
@@ -370,5 +375,24 @@ class Client
         $data = json_decode($response->getContent(), true);
 
         return (int)$data['data']['myRank'];
+    }
+
+    public function treasureHuntRoll()
+    {
+        $response = $this->client->request(
+                'POST',
+                $this->url . "/treasure-hunt/roll",
+                [
+                    'headers' => array_merge([
+                        'authorization' => 'Bearer ' . $this->token
+                    ], $this->headers)
+                ]
+            );
+
+        if ($response->getStatusCode() !== 201) {
+            echo "Error get peppers. Status code " . $response->getStatusCode() . "\n";
+        }
+
+        return json_decode($response->getContent(), true);
     }
 }

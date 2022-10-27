@@ -8,7 +8,8 @@ class Inventory
     public function __construct(
         private int $ration,
         private int $stim,
-        private int $potions
+        private int $potions,
+        private int $crowCnt
     )
     {
 
@@ -27,6 +28,16 @@ class Inventory
     public function getPotions(): int
     {
         return $this->potions;
+    }
+
+    public function getCrowCnt(): int
+    {
+        return $this->crowCnt;
+    }
+
+    public function consumeCrow(): void
+    {
+        $this->crowCnt--;
     }
 
     public function consumeRation(int $rations): void

@@ -31,6 +31,16 @@ foreach ($tournamentsIds as $tournamentsId) {
     $client->admireTournament($tournamentsId);
 }
 
+echo "Treasure Hun Roll \n";
+$inventory = $client->getInventory();
+while ($inventory->getCrowCnt() > 0) {
+    $roll = $client->treasureHuntRoll();
+    echo "You won x". $roll['data']['nextPos']['qty'] . " " . $roll['data']['nextPos']['code'] . "\n";
+    $inventory->consumeCrow();
+    sleep(rand(1,3));
+}
+
+
 echo "--------------------------------------------------------------------------------------\n";
 echo "End at: " . date("Y-m-d H:i:s")."\n";
 echo "--------------------------------------------------------------------------------------\n";
