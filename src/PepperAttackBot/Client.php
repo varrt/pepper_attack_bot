@@ -268,7 +268,15 @@ class Client
             $peppers[] = new Pepper(
                 $pepper['pepper_id'],
                 $pepper['current_hp'],
-                Pepper::calculateMaxHP((int)$pepper['pepper']['pepper_info']['vit'], (int)$pepper['temp_vit'])
+                Pepper::calculateMaxHP((int)$pepper['pepper']['pepper_info']['vit'], (int)$pepper['temp_vit']),
+                $pepper['pepper']['pepper_info']['character'],
+                (int) $pepper['boosted_atk'],
+                (int) $pepper['boosted_def'],
+                (int) $pepper['boosted_crit'],
+                (int) $pepper['boosted_eva'],
+                (int) $pepper['boosted_vit'],
+                (int) $pepper['boosted_enr'],
+                (int) $pepper['boosted_num']
             );
         }
         return $peppers;
@@ -391,6 +399,49 @@ class Client
                 'headers' => array_merge([
                     'authorization' => 'Bearer ' . $this->token
                 ], $this->headers)
+            ]
+        );
+
+        if ($response->getStatusCode() !== 201) {
+            echo "Error get peppers. Status code " . $response->getStatusCode() . "\n";
+        }
+
+        return json_decode($response->getContent(), true);
+    }
+
+    public function useStim(string $pepperId, string $state): array
+    {
+        $response = $this->client->request(
+            'POST',
+            $this->url . "/inventory/stim/use",
+            [
+                'headers' => array_merge([
+                    'authorization' => 'Bearer ' . $this->token
+                ], $this->headers),
+                'json' => [
+                    'pepper_id' => $pepperId,
+                    'state' => $state
+                ]
+            ]
+        );
+
+        if ($response->getStatusCode() !== 201) {
+            echo "Error get peppers. Status code " . $response->getStatusCode() . "\n";
+        }
+
+        return json_decode($response->getContent(), true);
+    }
+
+    public function setUpTeamPvP($data): array
+    {
+        $response = $this->client->request(
+            'POST',
+            $this->url . "/pvp/team",
+            [
+                'headers' => array_merge([
+                    'authorization' => 'Bearer ' . $this->token
+                ], $this->headers),
+                'json' => $data
             ]
         );
 
