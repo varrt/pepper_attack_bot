@@ -73,14 +73,14 @@ class Bot
         $quests = $this->client->getDailyQuests();
         $toClaim = [];
         foreach ($quests as $quest) {
-            if($quest['isCompleted'] == 1 && $quest['isClaimed'] != 1) {
+            if ($quest['isCompleted'] == 1 && $quest['isClaimed'] != 1) {
                 $toClaim[] = $quest['id'];
             }
         }
 
         $this->client->claimDailyQuests($toClaim);
 
-        for($i=1;$i<=4;$i++) {
+        for ($i = 1; $i <= 4; $i++) {
             $this->client->claimRewards($i);
         }
     }
@@ -136,7 +136,8 @@ class Bot
         ]);
     }
 
-    private function getPepperPosition(string $type, array &$usedPositions): int {
+    private function getPepperPosition(string $type, array &$usedPositions): int
+    {
         switch ($type) {
             case 'Ghost':
                 $usedPositions[] = 1;
@@ -154,7 +155,7 @@ class Bot
 
     private function wait(): void
     {
-        sleep(rand(1,2));
+        sleep(rand(1, 2));
     }
 
     public function upgradeHero(array $heroesStats, int $minStims = 50): void
@@ -214,9 +215,18 @@ class Bot
     public function singlePvEBattle(): bool
     {
         $inventory = $this->client->getInventory();
-        $this->healPeppers($inventory, 30, false);
+        $result = $this->healPeppers();
+        if (!$result) {
+            exit;
+        }
+
         $battleResult = $this->client->battlePvE($this->account->getMap(), $this->account->getStage());
-        $actions = count($battleResult['data']['combatActions']);
+
+        if (!isset($battleResult['data'])) {
+            print_r($battleResult);
+            exit;
+        }
+
         $inventory->consumeRation((int)$battleResult['data']['rationCost']);
 
         if ((int)$battleResult['data']['totalExp'] > 0) {
@@ -235,19 +245,19 @@ class Bot
         }
 
         if ($inventory->getRation() >= 100) {
-            sleep(rand(4,5));
+            sleep(rand(4, 5));
         }
 
         return $isWin;
     }
 
-    public function battlePvE($info = true): bool
+    public function battlePvE(): bool
     {
         $inventory = $this->client->getInventory();
-        $this->healPeppers($inventory, 30, $info);
+        $this->healPeppers();
 
         $isWin = false;
-        while($inventory->getRation() >= 100) {
+        while ($inventory->getRation() >= 100) {
             $battleResult = $this->client->battlePvE($this->account->getMap(), $this->account->getStage());
 
             $actions = count($battleResult['data']['combatActions']);
@@ -264,14 +274,14 @@ class Bot
             foreach ($rewards as $reward) {
                 if ($reward['code'] == 'hp_potion') {
                     $inventory->addPotions((int)$reward['value']);
-                    !$info ?? Writer::yellow("You got x%d Heal Potions.", (int)$reward['value']);
+                        Writer::yellow("You got x%d Heal Potions.", (int)$reward['value']);
                 }
                 if ($reward['code'] == 'stim') {
-                    !$info ?? Writer::magenta("You got x%d Stims.", (int)$reward['value']);
+                        Writer::magenta("You got x%d Stims.", (int)$reward['value']);
                 }
             }
 
-            $this->healPeppers($inventory, 30, $info);
+            $this->healPeppers();
 
             if ($inventory->getRation() >= 100) {
                 Writer::white("Left rations: %d. Waiting: %ds.", $inventory->getRation(), $actions * 4);
@@ -282,34 +292,44 @@ class Bot
         return $isWin;
     }
 
-    private function healPeppers(Inventory $inventory, int $defaultHealPointsLeft = 30, bool $debug = true): void {
+    private function healPeppers(bool $info = true): bool
+    {
+        $inventory = $this->client->getInventory();
+        Writer::magenta("Potions %d.", $inventory->getPotions());
         if ($inventory->getPotions() == 0) {
-            !$debug ?? Writer::red("Not enough potions");
-            return;
+            Writer::red("Not enough potions");
+            return false;
         }
 
         /** @var \PepperAttackBot\Model\Pepper[] $peppers */
         $peppers = $this->client->getPeppers();
 
-        foreach ($peppers as $pepper) {
-            $healedTimes = 0;
-            while ($pepper->getMaxHP() - $pepper->getCurrentHP() >= $defaultHealPointsLeft) {
-                $isHealed = $this->client->healPepper($pepper->getId());
-                $healedTimes++;
-                if ($isHealed) {
-                    !$debug ?? Writer::green("Heal pepper %s (%d/%d HP)", $pepper->getId(), min($pepper->getCurrentHP()+100, $pepper->getMaxHP()), $pepper->getMaxHP());
-                    $pepper->heal();
-                    $inventory->usePotion();
-                }
+        if ($inventory->getPotions() > 200) {
+            $this->client->healPeppers(array_map(function (Pepper $pepper) {
+                return $pepper->getId();
+            }, $peppers));
+        } else {
+            foreach ($peppers as $pepper) {
+                $healedTimes = 0;
+                while ($pepper->getMaxHP() - $pepper->getCurrentHP() >= 30) {
+                    $isHealed = $this->client->healPepper($pepper->getId());
+                    $healedTimes++;
+                    if ($isHealed) {
+                        !$info ?? Writer::green("Heal pepper %s (%d/%d HP)", $pepper->getId(), min($pepper->getCurrentHP() + 100, $pepper->getMaxHP()), $pepper->getMaxHP());
+                        $pepper->heal();
+                        $inventory->usePotion();
+                    }
 
-                if ($healedTimes > 10) {
-                    break;
+                    if ($healedTimes > 10) {
+                        break;
+                    }
+                    $this->wait();
                 }
                 $this->wait();
             }
-            $this->wait();
+            !$info ?? Writer::white("Left potions %d", $inventory->getPotions());
         }
-        !$debug ?? Writer::white("Left potions %d", $inventory->getPotions());
+        return true;
     }
 
     public function battlePvP(): void

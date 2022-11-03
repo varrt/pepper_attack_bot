@@ -243,6 +243,29 @@ class Client
         return true;
     }
 
+    public function healPeppers(array $peppers): bool
+    {
+        $response = $this->client->request(
+            'POST',
+            $this->url . "/inventory/hp/use-for-team",
+            [
+                'headers' => array_merge([
+                    'authorization' => 'Bearer ' . $this->token,
+                    'content-type' => 'application/json'
+                ], $this->headers),
+                'json' => [
+                    'peppers' => $peppers
+                ]
+            ]
+        );
+
+        if ($response->getStatusCode() !== 201) {
+            echo "Error heal peppers. Status code " . $response->getStatusCode() . "\n";
+            return false;
+        }
+        return true;
+    }
+
     public function getPeppers(): array
     {
         $response = $this->client->request(

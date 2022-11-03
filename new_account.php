@@ -82,6 +82,7 @@ while ($account->getStage() <= 16) {
 
     if ($lostCounter >= 3) {
         Writer::red("Lost %d battles. (stage %d)", $lostCounter, $account->getStage());
+        break;
     }
 }
 Writer::green("Reach 16 stage.");
