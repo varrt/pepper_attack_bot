@@ -13,8 +13,27 @@ echo "--------------------------------------------------------------------------
 $accounts = new AccountsReader(__DIR__."/accounts.json");
 foreach ($accounts->getAccounts() as $account) {
     $bot = new Bot($account);
-    $bot->setupTeam();
-    $bot->upgradeHero();
+    $bot->setupTeamPvP();
+    $bot->upgradeHero([
+        'Ghost' => [
+            'atk' => 150,
+            'eva' => 90,
+            'crit' => 50
+        ],
+        'Bell' => [
+            'atk' => 40,
+            'def' => 150,
+            'vit' => 100
+        ],
+        'Chilli' => [
+            'def' => 120,
+            'atk' => 100
+        ],
+        'Chilli2' => [
+            'def' => 120,
+            'atk' => -1
+        ]
+    ]);
 }
 
 echo "--------------------------------------------------------------------------------------\n";

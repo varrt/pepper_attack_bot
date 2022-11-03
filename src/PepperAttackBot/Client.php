@@ -99,7 +99,7 @@ class Client
             ]
         );
 
-        if ($response->getStatusCode() !== 200 || $response->getStatusCode() !== 201) {
+        if ($response->getStatusCode() !== 200 && $response->getStatusCode() !== 201) {
             echo "Error call. Status code " . $response->getStatusCode() . "\n";
         }
     }
@@ -343,7 +343,7 @@ class Client
             ]
         );
 
-        if ($response->getStatusCode() !== 200 || $response->getStatusCode() !== 201) {
+        if ($response->getStatusCode() !== 200 && $response->getStatusCode() !== 201) {
             echo "Error claim. Status code " . $response->getStatusCode() . "\n";
         }
     }
@@ -364,7 +364,7 @@ class Client
             ]
         );
 
-        if ($response->getStatusCode() !== 200 || $response->getStatusCode() !== 201) {
+        if ($response->getStatusCode() !== 200 && $response->getStatusCode() !== 201) {
             echo "Error claim. Status code " . $response->getStatusCode() . "\n";
         }
     }
@@ -402,7 +402,7 @@ class Client
             ]
         );
 
-        if ($response->getStatusCode() !== 200 || $response->getStatusCode() !== 201) {
+        if ($response->getStatusCode() !== 200 && $response->getStatusCode() !== 201) {
             echo "Error get peppers. Status code " . $response->getStatusCode() . "\n";
         }
 
@@ -437,6 +437,26 @@ class Client
         $response = $this->client->request(
             'POST',
             $this->url . "/pvp/team",
+            [
+                'headers' => array_merge([
+                    'authorization' => 'Bearer ' . $this->token
+                ], $this->headers),
+                'json' => $data
+            ]
+        );
+
+        if ($response->getStatusCode() !== 201) {
+            echo "Error get peppers. Status code " . $response->getStatusCode() . "\n";
+        }
+
+        return json_decode($response->getContent(), true);
+    }
+
+    public function setUpTeamPvE(array $data): array
+    {
+        $response = $this->client->request(
+            'POST',
+            $this->url . "/pve/team",
             [
                 'headers' => array_merge([
                     'authorization' => 'Bearer ' . $this->token
