@@ -38,17 +38,17 @@ class Bot
 
         $tournaments = $this->client->currentSeason();
         foreach ($tournaments as $tournament) {
-            $rank = $this->client->getMyRank($tournament);
-            Writer::white("Tournament %s rank: %d", $tournament, $rank);
+            $rank = $this->client->getMyRank($tournament['id']);
+            Writer::white("Tournament %s rank: %d", $tournament['name'], $rank);
         }
     }
 
     public function admire(): void
     {
         Writer::white("Admire potions.");
-        $tournamentsIds = $this->client->currentSeason();
-        foreach ($tournamentsIds as $tournamentsId) {
-            $this->client->admireTournament($tournamentsId);
+        $tournaments = $this->client->currentSeason();
+        foreach ($tournaments as $tournament) {
+            $this->client->admireTournament($tournament['id']);
         }
     }
 

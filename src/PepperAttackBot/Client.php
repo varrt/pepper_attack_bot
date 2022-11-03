@@ -123,7 +123,14 @@ class Client
         $data = json_decode($response->getContent(), true);
 
         return array_map(function (array $tournament) {
-            return $tournament['id'];
+            return [
+                'id' => $tournament['id'],
+                'name' => match ($tournament['type']) {
+                    3 => 'Tavern Fight',
+                    4 => 'Adventure EXP',
+                    5 => 'Boosters'
+                }
+            ];
         }, $data['data']['tournaments']);
     }
 
@@ -259,7 +266,7 @@ class Client
             ]
         );
 
-        if ($response->getStatusCode() !== 201) {
+        if ($response->getStatusCode() !== 201 && $response->getStatusCode() !== 200) {
             echo "Error heal peppers. Status code " . $response->getStatusCode() . "\n";
             return false;
         }
@@ -293,13 +300,13 @@ class Client
                 $pepper['current_hp'],
                 Pepper::calculateMaxHP((int)$pepper['pepper']['pepper_info']['vit'], (int)$pepper['temp_vit']),
                 $pepper['pepper']['pepper_info']['character'],
-                (int) $pepper['boosted_atk'],
-                (int) $pepper['boosted_def'],
-                (int) $pepper['boosted_crit'],
-                (int) $pepper['boosted_eva'],
-                (int) $pepper['boosted_vit'],
-                (int) $pepper['boosted_enr'],
-                (int) $pepper['boosted_num']
+                (int)$pepper['boosted_atk'],
+                (int)$pepper['boosted_def'],
+                (int)$pepper['boosted_crit'],
+                (int)$pepper['boosted_eva'],
+                (int)$pepper['boosted_vit'],
+                (int)$pepper['boosted_enr'],
+                (int)$pepper['boosted_num']
             );
         }
         return $peppers;
