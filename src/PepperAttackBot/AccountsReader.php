@@ -14,7 +14,14 @@ class AccountsReader
         $data = json_decode(file_get_contents($file), true);
 
         foreach ($data['accounts'] as $account) {
-            $this->accounts[] = new Account($account['email'], $account['password'], (int)$account['map'], (int)$account['stage']);
+            $stage = (int)$account['stage'];
+            if ($stage % 10 === 0) {
+                $map = (($stage - ($stage % 10)) / 10) ;
+            } else {
+                $map = (($stage - ($stage % 10)) / 10) + 1;
+            }
+
+            $this->accounts[] = new Account($account['email'], $account['password'], $map, $stage);
         }
     }
 

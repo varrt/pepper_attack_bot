@@ -19,7 +19,11 @@ if (isset($argv[1])) {
 
 $accounts = new AccountsReader(__DIR__."/accounts.json");
 if (isset($argv[2])) {
-    $accounts->setAccounts([$accounts->getAccount($argv[2])]);
+    $account = $accounts->getAccount($argv[2]);
+    if (isset($argv[3]) && (int)$argv[3] > 0) {
+        $account->setStage((int)$argv[3]);
+    }
+    $accounts->setAccounts([$account]);
 }
 
 foreach ($accounts->getAccounts() as $account) {

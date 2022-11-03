@@ -34,4 +34,14 @@ class Account
     {
         return $this->stage;
     }
+
+    public function setStage(int $stage): void
+    {
+        if ($stage % 10 === 0) {
+            $this->map = (($stage - ($stage % 10)) / 10) ;
+        } else {
+            $this->map = (($stage - ($stage % 10)) / 10) + 1;
+        }
+        $this->stage = $stage;
+    }
 }
