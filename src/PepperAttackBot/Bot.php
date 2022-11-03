@@ -312,6 +312,7 @@ class Bot
             $this->client->healPeppers(array_map(function (Pepper $pepper) {
                 return $pepper->getId();
             }, $peppers));
+            Writer::yellow("Heal all team!");
         } else {
             foreach ($peppers as $pepper) {
                 $healedTimes = 0;
