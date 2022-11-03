@@ -1,6 +1,6 @@
 # Pepper Attack Bot
 
-Version: 0.9
+Version: 1.0
 
 ## Requirements
 
@@ -16,23 +16,32 @@ compsoer install
 
 ## Running application
 
-```shell
-php collect_rotion.php you_remail your_password
-php admire.php you_remail your_password
-php tovern_fight.php you_remail your_password
-php adventure.php you_remail your_password map_id stage_id heal_hp_left<optional>
-php daily_quest.php you_remail your_password
+
+### Create `account.json` file
+
+```json
+{
+  "accounts": [
+    {
+      "email": "your_email",
+      "password": "your_password",
+      "map": 2,
+      "stage": 16
+    }
+  ]
+}
+
 ```
 
-# Adventure mod
-- map_id - it's first number in your current stage (displayed on screen). Example: Stage 2-1 your map_id = 2
-- stage_id - it's second number in your current state (displayed on screen) plus map_id multiple 10 minus 10. Example: Stage 3-2 your stage_id = 22  
-- heal_hp_left - it's max health points left after healing your peppers. 
-  - Example1: Your pepper has max HP 160 and his current HP is 140, and you set heal_hp_left on 50 than your pepper will not be healed.
-  - Example2: Your pepper has max HP 160 and his current HP is 140, and you set heal_hp_left on 20 than your pepper will be healed.
-- 
+```shell
+php collect_rations.php // collect rations, run before stack 500 rations to collect
+php season_tasks.php // run on start season if you have enuogh stims 
+php tovern_fight.php // run for fight in tovern
+php adventure.php // run for fight in adventure
+php daily_tasks.php // run to admire potions, claim quests or dice roll
+```
 
- 
+
 Bot doesn't write your password or email anywhere. It's use only for login to PepperAttack game.
 
 # Donate
@@ -62,11 +71,13 @@ nano /etc/crontab
 
 And you append a line on end of file
 ```shell
-10 */6 * * * php BOT_DIR_PATH/collect_rotion.php your_email your_password
-0 6 * * * php BOT_DIR_PATH/admire.php your_email your_password
-0 9 * * * php BOT_DIR_PATH/tovern_fight.php your_email your_password
-0 11 */2 * * php BOT_DIR_PATH/tovern_fight.php your_email your_password map_id stage_id hp_left_points<optional>
-0 22 * * * php BOT_DIR_PATH/daily_quest.php your_email your_password
+30 2 * * WED php /home/debian/PepperAttackBot/season_tasks.php
+
+0 */6 * * * php /home/debian/PepperAttackBot/collect_rotion.php
+0 7 * * * php /home/debian/PepperAttackBot/daily_tasks.php
+
+0 8 * * * php /home/debian/PepperAttackBot/adventure.php
+0 10 * * * php /home/debian/PepperAttackBot/tovern_fight.php 
 ```
 
 Save file and forgot to collection ration and admire potions :)

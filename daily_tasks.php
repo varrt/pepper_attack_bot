@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use PepperAttackBot\Writer;
 use PepperAttackBot\AccountsReader;
 use PepperAttackBot\Bot;
 
@@ -11,25 +10,13 @@ echo "--------------------------------------------------------------------------
 echo "Start at: " . date("Y-m-d H:i:s")."\n";
 echo "--------------------------------------------------------------------------------------\n";
 
-$minRations = 4000;
-if (isset($argv[1])) {
-    $minRations = (int)$argv[1];
-    Writer::magenta("Minimum rations set to %d", $minRations);
-}
-
 $accounts = new AccountsReader(__DIR__."/accounts.json");
-if (isset($argv[2])) {
-    $accounts->setAccounts([$accounts->getAccount($argv[2])]);
-}
 
 foreach ($accounts->getAccounts() as $account) {
     $bot = new Bot($account);
-    if (!$bot->checkRations($minRations)) {
-        Writer::red("Waiting for more rations");
-        continue;
-    }
-
-    $bot->battlePvE();
+    $bot->admire();
+    $bot->treasureHuntRoll();
+    $bot->dailyQuests();
 }
 
 echo "--------------------------------------------------------------------------------------\n";

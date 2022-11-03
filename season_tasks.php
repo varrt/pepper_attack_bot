@@ -1,7 +1,8 @@
 <?php
 declare(strict_types=1);
 
-use PepperAttackBot\Client;
+use PepperAttackBot\AccountsReader;
+use PepperAttackBot\Bot;
 
 require __DIR__.'/vendor/autoload.php';
 
@@ -9,24 +10,12 @@ echo "--------------------------------------------------------------------------
 echo "Start at: " . date("Y-m-d H:i:s")."\n";
 echo "--------------------------------------------------------------------------------------\n";
 
-if (!isset($argv[1])) {
-    echo "You must provide an email as first argument.\n";
-    exit;
+$accounts = new AccountsReader(__DIR__."/accounts.json");
+foreach ($accounts->getAccounts() as $account) {
+    $bot = new Bot($account);
+    $bot->setupTeam();
+    $bot->upgradeHero();
 }
-
-if (!isset($argv[2])) {
-    echo "You must provide a password as second argument\n";
-    exit;
-}
-echo "Account: ". $argv[1].".\n";
-
-$client = new Client();
-$client->login($argv[1], $argv[2]);
-sleep(rand(1,3));
-
-echo "Collect ration start\n";
-$client->collectRation();
-echo "Collect ration end\n";
 
 echo "--------------------------------------------------------------------------------------\n";
 echo "End at: " . date("Y-m-d H:i:s")."\n";
