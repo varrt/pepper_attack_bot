@@ -23,6 +23,10 @@ $bot->setupTeamPvE();
 // reach 11 stage
 $lostCounter = 0;
 while ($account->getStage() <= 11) {
+    if ($account->getStage() === 9) {
+        $bot->setupTeamPvE(['Ghost' => 4, 'Bell' => 6, 'Chilli' => 2]);
+    }
+
     Writer::white("Run stage %d", $account->getStage());
     $result = $bot->singlePvEBattle();
     if ($result) {

@@ -97,7 +97,7 @@ class Bot
         $usedPositions = [];
         $positions = array_map(function (Pepper $pepper) use (&$usedPositions) {
             return [
-                'pos' => $this->getPepperPosition($pepper->getType(), $usedPositions),
+                'pos' => $this->getPepperPosition([], $pepper->getType(), $usedPositions),
                 'id' => $pepper->getId()
             ];
         }, $heroes);
@@ -118,13 +118,13 @@ class Bot
         ]);
     }
 
-    public function setupTeamPvE(): void
+    public function setupTeamPvE(array $positionConfig = []): void
     {
         $heroes = $this->client->getPeppers();
         $usedPositions = [];
-        $positions = array_map(function (Pepper $pepper) use (&$usedPositions) {
+        $positions = array_map(function (Pepper $pepper) use (&$usedPositions, $positionConfig) {
             return [
-                'pos' => $this->getPepperPosition($pepper->getType(), $usedPositions),
+                'pos' => $this->getPepperPosition($positionConfig, $pepper->getType(), $usedPositions),
                 'id' => $pepper->getId()
             ];
         }, $heroes);
@@ -136,8 +136,12 @@ class Bot
         ]);
     }
 
-    private function getPepperPosition(string $type, array &$usedPositions): int
+    private function getPepperPosition(array $positionConfig, string $type, array &$usedPositions): int
     {
+        if (isset($positionConfig[$type])) {
+            return $positionConfig[$type];
+        }
+
         switch ($type) {
             case 'Ghost':
                 $usedPositions[] = 1;
