@@ -343,7 +343,7 @@ class Client
             ]
         );
 
-        if ($response->getStatusCode() !== 201) {
+        if ($response->getStatusCode() !== 200 || $response->getStatusCode() !== 201) {
             echo "Error claim. Status code " . $response->getStatusCode() . "\n";
         }
     }
@@ -364,7 +364,7 @@ class Client
             ]
         );
 
-        if ($response->getStatusCode() !== 201) {
+        if ($response->getStatusCode() !== 200 || $response->getStatusCode() !== 201) {
             echo "Error claim. Status code " . $response->getStatusCode() . "\n";
         }
     }
@@ -402,7 +402,7 @@ class Client
             ]
         );
 
-        if ($response->getStatusCode() !== 201) {
+        if ($response->getStatusCode() !== 200 || $response->getStatusCode() !== 201) {
             echo "Error get peppers. Status code " . $response->getStatusCode() . "\n";
         }
 
