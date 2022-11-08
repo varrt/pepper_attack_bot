@@ -9,7 +9,8 @@ class Account
         private string $email,
         private string $password,
         private int    $map,
-        private int    $stage
+        private int    $stage,
+        private array   $boostsConfig
     )
     {
 
@@ -28,6 +29,11 @@ class Account
     public function getMap(): int
     {
         return $this->map;
+    }
+
+    public function getBoostsConfig(): array
+    {
+        return $this->boostsConfig;
     }
 
     public function getStage(): int

@@ -86,4 +86,9 @@ class Pepper
             case 'vit': $this->boostedVit = $value; break;
         }
     }
+
+    public function clearBoostedCount(): void
+    {
+        $this->boostedCount = 0;
+    }
 }

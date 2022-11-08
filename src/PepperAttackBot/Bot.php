@@ -15,7 +15,7 @@ class Bot
         private Account $account
     )
     {
-        Writer::blue("Account: %s.", $this->account->getEmail());
+        Writer::yellow("Account: %s.", $this->account->getEmail());
         $this->client = new Client();
         $this->client->login($account->getEmail(), $account->getPassword());
         $this->wait();
@@ -208,6 +208,80 @@ class Bot
                             break;
                         }
                     }
+                }
+            }
+        }
+    }
+    public function upgradeHeroDry(array $heroesStats, int $steams, int $minStims = 50): void
+    {
+        /** @var \PepperAttackBot\Model\Pepper[] $heroes */
+        $heroes = $this->client->getPeppers(true);
+
+        $upgradedQueue = [];
+        foreach ($heroes as $hero) {
+            if (!array_key_exists($hero->getType(), $upgradedQueue)) {
+                $upgradedQueue[$hero->getType()] = $hero;
+            } else {
+                $upgradedQueue['Chilli2'] = $hero;
+            }
+        }
+        $stimsLeft = $steams;
+
+        /**
+         * @var string $name
+         * @var \PepperAttackBot\Model\Pepper $hero
+         */
+        foreach ($upgradedQueue as $name => $hero) {
+
+            Writer::magenta("Hero stats: (atk: %s),(def: %s),(crit: %s),(enr: %s),(eva: %s),(vit: %s) ",
+                $hero->getStat('atk'),
+                $hero->getStat('def'),
+                $hero->getStat('crit'),
+                $hero->getStat('enr'),
+                $hero->getStat('eva'),
+                $hero->getStat('vit')
+            );
+
+            $hero->clearBoostedCount();
+
+            if (!isset($upgradedQueue['Chilli2'])) {
+                $heroesStats['Chilli']['atk'] = -1;
+            }
+
+            if (isset($heroesStats[$name])) {
+                Writer::green("Upgrade: %s", $name);
+                foreach ($heroesStats[$name] as $state => $value) {
+                    if ($value > 0 && $hero->getStat($state) >= $value) {
+                        continue;
+                    }
+                    $stateBoostedCnt = 0;
+                    while ($stimsLeft >= $minStims) {
+                        $stateBoostedCnt++;
+                        $stimsLeft = $stimsLeft - match (true) {
+                                $hero->getBoostedCount() <= 19 => 1,
+                                $hero->getBoostedCount() <= 29 => 2,
+                                $hero->getBoostedCount() <= 39 => 3,
+                                $hero->getBoostedCount() <= 49 => 5,
+                                $hero->getBoostedCount() <= 59 => 8,
+                                $hero->getBoostedCount() <= 69 => 13,
+                                $hero->getBoostedCount() <= 79 => 21,
+                                $hero->getBoostedCount() <= 89 => 34,
+                                $hero->getBoostedCount() <= 99 => 55,
+                            };
+                        $hero->incrementBoostedCount();
+                        $hero->setStat($state, $hero->getStat($state) + 2);
+                        if ($stimsLeft < $minStims && $value > 0) {
+                            Writer::red("Not enough stims!");
+                        }
+                        if($stimsLeft < $minStims && in_array($name, ['Chilli', 'Chilli2']) && $state == 'atk') {
+                            Writer::magenta("Chilly atk stat boosted %d times! (akt: %d)", $stateBoostedCnt, $hero->getStat('atk'));
+                        }
+
+                        if ($hero->getBoostedCount() >= 90 || ($value > 0 && $hero->getStat($state) >= $value)) {
+                            break;
+                        }
+                    }
+                    Writer::blue("Upgrade hero %s, Stat %d %s, Left stims: %d", $name, $hero->getStat($state), $state, $stimsLeft);
                 }
             }
         }

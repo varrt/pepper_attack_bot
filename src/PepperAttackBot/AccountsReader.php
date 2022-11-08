@@ -21,7 +21,7 @@ class AccountsReader
                 $map = (($stage - ($stage % 10)) / 10) + 1;
             }
 
-            $this->accounts[] = new Account($account['email'], $account['password'], $map, $stage);
+            $this->accounts[] = new Account($account['email'], $account['password'], $map, $stage, $account['new_season_stats'] ?? []);
         }
     }
 

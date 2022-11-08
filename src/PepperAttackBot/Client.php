@@ -273,7 +273,7 @@ class Client
         return true;
     }
 
-    public function getPeppers(): array
+    public function getPeppers(bool $baseStats = false): array
     {
         $response = $this->client->request(
             'GET',
@@ -300,12 +300,12 @@ class Client
                 $pepper['current_hp'],
                 Pepper::calculateMaxHP((int)$pepper['pepper']['pepper_info']['vit'], (int)$pepper['temp_vit']),
                 $pepper['pepper']['pepper_info']['character'],
-                (int)$pepper['boosted_atk'],
-                (int)$pepper['boosted_def'],
-                (int)$pepper['boosted_crit'],
-                (int)$pepper['boosted_eva'],
-                (int)$pepper['boosted_vit'],
-                (int)$pepper['boosted_enr'],
+                $baseStats ? (int)$pepper['pepper']['pepper_info']['atk'] : (int)$pepper['boosted_atk'],
+                $baseStats ? (int)$pepper['pepper']['pepper_info']['def'] : (int)$pepper['boosted_def'],
+                $baseStats ? (int)$pepper['pepper']['pepper_info']['crit'] : (int)$pepper['boosted_crit'],
+                $baseStats ? (int)$pepper['pepper']['pepper_info']['eva'] : (int)$pepper['boosted_eva'],
+                $baseStats ? (int)$pepper['pepper']['pepper_info']['vit'] : (int)$pepper['boosted_vit'],
+                $baseStats ? (int)$pepper['pepper']['pepper_info']['enr'] : (int)$pepper['boosted_enr'],
                 (int)$pepper['boosted_num']
             );
         }
