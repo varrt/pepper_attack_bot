@@ -28,6 +28,11 @@ if (isset($argv[2])) {
 
 foreach ($accounts->getAccounts() as $account) {
     $bot = new Bot($account);
+
+    if ($bot->getInventory()->getPotions() <= 30) {
+        Writer::red("Too low potions");
+    }
+
     if (!$bot->checkRations($minRations)) {
         Writer::red("Waiting for more rations");
         continue;
