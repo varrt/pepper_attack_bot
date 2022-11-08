@@ -185,6 +185,10 @@ class Bot
                 continue;
             }
 
+            if (!isset($upgradedQueue['Chilli2'])) {
+                $heroesStats['Chilli']['atk'] = -1;
+            }
+
             if (isset($heroesStats[$name])) {
                 Writer::green("Upgrade: %s", $name);
                 foreach ($heroesStats[$name] as $state => $value) {
