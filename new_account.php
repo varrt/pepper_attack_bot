@@ -13,7 +13,7 @@ echo "Start at: " . date("Y-m-d H:i:s")."\n";
 echo "--------------------------------------------------------------------------------------\n";
 
 
-$account = new Account($argv[1], $argv[2], 1, 1);
+$account = new Account($argv[1], $argv[2], 1, 1, []);
 $account->setStage((int)$argv[3]);
 
 $bot = new Bot($account);
