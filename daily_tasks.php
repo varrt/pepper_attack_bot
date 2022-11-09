@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use PepperAttackBot\AccountsReader;
 use PepperAttackBot\Bot;
+use PepperAttackBot\Writer;
 
 require __DIR__.'/vendor/autoload.php';
 
@@ -13,10 +14,14 @@ echo "--------------------------------------------------------------------------
 $accounts = new AccountsReader(__DIR__."/accounts.json");
 
 foreach ($accounts->getAccounts() as $account) {
-    $bot = new Bot($account);
-    $bot->admire();
-    $bot->treasureHuntRoll();
-    $bot->dailyQuests();
+    try {
+        $bot = new Bot($account);
+        $bot->admire();
+        $bot->treasureHuntRoll();
+    } catch (Exception $e) {
+        Writer::red("Exception %s", $e->getMessage());
+        continue;
+    }
 }
 
 echo "--------------------------------------------------------------------------------------\n";

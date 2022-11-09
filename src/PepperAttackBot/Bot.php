@@ -333,12 +333,13 @@ class Bot
         return $isWin;
     }
 
-    public function battlePvE(): bool
+    public function battlePvE(?int $maxBattles = 50): bool
     {
         $inventory = $this->client->getInventory();
         $this->healPeppers();
 
         $isWin = false;
+        $battles = 0;
         while ($inventory->getRation() >= 100) {
             $battleResult = $this->client->battlePvE($this->account->getMap(), $this->account->getStage());
 
@@ -364,6 +365,11 @@ class Bot
             }
 
             $this->healPeppers();
+
+            $battles++;
+            if ($battles >= $maxBattles) {
+                break;
+            }
 
             if ($inventory->getRation() >= 100) {
                 Writer::white("Left rations: %d. Waiting: %ds.", $inventory->getRation(), $actions * 4);
@@ -448,5 +454,24 @@ class Bot
     public function getInventory(): Inventory
     {
         return $this->client->getInventory();
+    }
+
+    public function heroInfo(): void
+    {
+        $peppers = $this->client->getPeppers();
+
+        /** @var Pepper $pepper */
+        foreach ($peppers as $pepper) {
+            Writer::magenta("Hero %s stats: (boosts: %d), (atk: %s),(def: %s),(crit: %s),(enr: %s),(eva: %s),(vit: %s) ",
+                $pepper->getType(),
+                $pepper->getBoostedCount(),
+                $pepper->getStat('atk'),
+                $pepper->getStat('def'),
+                $pepper->getStat('crit'),
+                $pepper->getStat('enr'),
+                $pepper->getStat('eva'),
+                $pepper->getStat('vit')
+            );
+        }
     }
 }

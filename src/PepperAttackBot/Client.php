@@ -100,7 +100,7 @@ class Client
         );
 
         if ($response->getStatusCode() !== 200 && $response->getStatusCode() !== 201) {
-            echo "Error call. Status code " . $response->getStatusCode() . "\n";
+            echo "Error admire. Status code " . $response->getStatusCode() . "\n";
         }
     }
 
@@ -117,7 +117,7 @@ class Client
         );
 
         if ($response->getStatusCode() !== 200) {
-            echo "Error call. Status code " . $response->getStatusCode() . "\n";
+            echo "Error season. Status code " . $response->getStatusCode() . "\n";
         }
 
         $data = json_decode($response->getContent(), true);
@@ -374,7 +374,8 @@ class Client
         );
 
         if ($response->getStatusCode() !== 200 && $response->getStatusCode() !== 201) {
-            echo "Error claim. Status code " . $response->getStatusCode() . "\n";
+            echo "Error claim daily quest. Status code " . $response->getStatusCode() . "\n";
+            print_r($response->getContent());
         }
     }
 
@@ -395,7 +396,7 @@ class Client
         );
 
         if ($response->getStatusCode() !== 200 && $response->getStatusCode() !== 201) {
-            echo "Error claim. Status code " . $response->getStatusCode() . "\n";
+            echo "Error claim rewards. Status code " . $response->getStatusCode() . "\n";
         }
     }
 
@@ -433,7 +434,7 @@ class Client
         );
 
         if ($response->getStatusCode() !== 200 && $response->getStatusCode() !== 201) {
-            echo "Error get peppers. Status code " . $response->getStatusCode() . "\n";
+            echo "Error roll. Status code " . $response->getStatusCode() . "\n";
         }
 
         return json_decode($response->getContent(), true);

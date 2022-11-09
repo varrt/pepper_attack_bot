@@ -13,10 +13,15 @@ echo "--------------------------------------------------------------------------
 
 $accounts = new AccountsReader(__DIR__."/accounts.json");
 
+if (isset($argv[1])) {
+    $account = $accounts->getAccount($argv[1]);
+    $accounts->setAccounts([$account]);
+}
+
 foreach ($accounts->getAccounts() as $account) {
     try {
         $bot = new Bot($account);
-        $bot->collectRotions();
+        $bot->heroInfo();
     } catch (Exception $e) {
         Writer::red("Exception %s", $e->getMessage());
         continue;

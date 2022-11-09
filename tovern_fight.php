@@ -19,8 +19,13 @@ if (isset($argv[1])) {
 }
 
 foreach ($accounts->getAccounts() as $account) {
-    $bot = new Bot($account);
-    $bot->battlePvP();
+    try {
+        $bot = new Bot($account);
+        $bot->battlePvP();
+    } catch (Exception $e) {
+        Writer::red("Exception %s", $e->getMessage());
+        continue;
+    }
 }
 
 echo "--------------------------------------------------------------------------------------\n";

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use PepperAttackBot\AccountsReader;
 use PepperAttackBot\Bot;
+use PepperAttackBot\Writer;
 
 require __DIR__.'/vendor/autoload.php';
 
@@ -22,14 +23,18 @@ if (isset($argv[2])) {
 }
 
 foreach ($accounts->getAccounts() as $account) {
-    $bot = new Bot($account);
-    $inventory = $bot->getInventory();
-    if ($account->getBoostsConfig()) {
-        $bot->upgradeHeroDry($account->getBoostsConfig(), $inventory->getStim(), 8);
-    } else {
-        \PepperAttackBot\Writer::red("Config is null.");
+    try {
+        $bot = new Bot($account);
+        $inventory = $bot->getInventory();
+        if ($account->getBoostsConfig()) {
+            $bot->upgradeHeroDry($account->getBoostsConfig(), $inventory->getStim(), 8);
+        } else {
+            \PepperAttackBot\Writer::red("Config is null.");
+        }
+    } catch (Exception $e) {
+        Writer::red("Exception %s", $e->getMessage());
+        continue;
     }
-
 }
 
 echo "--------------------------------------------------------------------------------------\n";

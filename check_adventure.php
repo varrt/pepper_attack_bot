@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
+use PepperAttackBot\Writer;
 use PepperAttackBot\AccountsReader;
 use PepperAttackBot\Bot;
-use PepperAttackBot\Writer;
 
 require __DIR__.'/vendor/autoload.php';
 
@@ -12,11 +12,25 @@ echo "Start at: " . date("Y-m-d H:i:s")."\n";
 echo "--------------------------------------------------------------------------------------\n";
 
 $accounts = new AccountsReader(__DIR__."/accounts.json");
+if (isset($argv[1])) {
+    $account = $accounts->getAccount($argv[1]);
+    $accounts->setAccounts([$account]);
+}
 
 foreach ($accounts->getAccounts() as $account) {
     try {
         $bot = new Bot($account);
-        $bot->collectRotions();
+        $inventory = $bot->getInventory();
+        if ($inventory->getPotions() <= 10) {
+            Writer::red("Too low potions. (%d)", $inventory->getPotions());
+        }
+
+        if (!$bot->checkRations(100)) {
+            Writer::red("Waiting for more rations");
+            continue;
+        }
+
+        $bot->battlePvE(1);
     } catch (Exception $e) {
         Writer::red("Exception %s", $e->getMessage());
         continue;

@@ -27,18 +27,23 @@ if (isset($argv[2])) {
 }
 
 foreach ($accounts->getAccounts() as $account) {
-    $bot = new Bot($account);
+    try {
+        $bot = new Bot($account);
 
-    if ($bot->getInventory()->getPotions() <= 30) {
-        Writer::red("Too low potions");
-    }
+        if ($bot->getInventory()->getPotions() <= 30) {
+            Writer::red("Too low potions");
+        }
 
-    if (!$bot->checkRations($minRations)) {
-        Writer::red("Waiting for more rations");
+        if (!$bot->checkRations($minRations)) {
+            Writer::red("Waiting for more rations");
+            continue;
+        }
+
+        $bot->battlePvE();
+    } catch (Exception $e) {
+        Writer::red("Exception %s", $e->getMessage());
         continue;
     }
-
-    $bot->battlePvE();
 }
 
 echo "--------------------------------------------------------------------------------------\n";

@@ -16,7 +16,7 @@ $accounts = new AccountsReader(__DIR__."/accounts.json");
 foreach ($accounts->getAccounts() as $account) {
     try {
         $bot = new Bot($account);
-        $bot->collectRotions();
+        $bot->dailyQuests();
     } catch (Exception $e) {
         Writer::red("Exception %s", $e->getMessage());
         continue;
