@@ -104,7 +104,7 @@ class Client
         }
 
         $data = json_decode($response->getContent(), true);
-        return (int)$data['data']['data'][0]['balance'];
+        return isset($data['data']['data'][0]) ? (int)$data['data']['data'][0]['balance'] : 0;
     }
 
     public function admireTournament(string $id): void

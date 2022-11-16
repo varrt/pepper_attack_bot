@@ -30,7 +30,7 @@ foreach ($accounts->getAccounts() as $account) {
     try {
         $bot = new Bot($account);
 
-        if ($bot->getInventory()->getPotions() <= 30) {
+        if ($bot->getInventory()->getPotions() <= 15) {
             Writer::red("Too low potions");
             continue;
         }

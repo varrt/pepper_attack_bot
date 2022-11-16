@@ -376,6 +376,10 @@ class Bot
         while ($inventory->getRation() >= 100) {
             $battleResult = $this->client->battlePvE($this->account->getMap(), $this->account->getStage());
 
+            if (!isset($battleResult['data'])) {
+                break;
+            }
+
             $actions = count($battleResult['data']['combatActions']);
             $inventory->consumeRation((int)$battleResult['data']['rationCost']);
 
