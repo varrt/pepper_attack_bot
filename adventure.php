@@ -32,6 +32,7 @@ foreach ($accounts->getAccounts() as $account) {
 
         if ($bot->getInventory()->getPotions() <= 30) {
             Writer::red("Too low potions");
+            continue;
         }
 
         if (!$bot->checkRations($minRations)) {

@@ -39,8 +39,38 @@ class Bot
         $tournaments = $this->client->currentSeason();
         foreach ($tournaments as $tournament) {
             $rank = $this->client->getMyRank($tournament['id']);
-            Writer::white("Tournament %s rank: %d", $tournament['name'], $rank);
+            $myte = 0;
+            if ($tournament['name'] !== 'Boosters') {
+                $myte = $this->getMYTEByRank($rank);
+            }
+            Writer::white("Tournament %s rank: %d (MYTE: %d)", $tournament['name'], $rank, $myte);
         }
+
+        $balance = $this->client->getBalance();
+        Writer::magenta("Balance: %d", $balance);
+    }
+
+    private function getMYTEByRank(int $rank): int
+    {
+        try {
+            return match(true) {
+                $rank === 1 => 150000,
+                $rank === 2 => 100000,
+                $rank === 3 => 70000,
+                $rank >= 4 && $rank <= 5 => 50000,
+                $rank >= 6 && $rank <= 10 => 25000,
+                $rank >= 11 && $rank <= 20 => 15000,
+                $rank >= 21 && $rank <= 50 => 10000,
+                $rank >= 51 && $rank <= 100 => 5000,
+                $rank >= 101 && $rank <= 200 => 1000,
+                $rank >= 201 && $rank <= 300 => 500,
+                $rank >= 301 && $rank <= 500 => 100,
+                $rank >= 501 && $rank <= 1000 => 50
+            };
+        } catch (\UnhandledMatchError $e) {
+            return 0;
+        }
+
     }
 
     public function admire(): void
@@ -198,6 +228,9 @@ class Bot
                     $stimsLeft = 1000;
                     while ($stimsLeft >= $minStims) {
                         $data = $this->client->useStim($hero->getId(), (string)$state);
+                        if (!isset($data['data'])) {
+                            break;
+                        }
                         $stimsLeft = (int)$data['data']['stim']['quantity'];
                         $this->wait();
                         $boostedValue = (int)$data['data']['pepper']['boosted_' . $state];
@@ -333,7 +366,7 @@ class Bot
         return $isWin;
     }
 
-    public function battlePvE(?int $maxBattles = 50): bool
+    public function battlePvE(?int $maxBattles = 50, bool $toFirstLost = false): bool
     {
         $inventory = $this->client->getInventory();
         $this->healPeppers();
@@ -348,9 +381,15 @@ class Bot
 
             if ((int)$battleResult['data']['totalExp'] > 0) {
                 $isWin = true;
-                Writer::green("Win (%d EXP).", (int)$battleResult['data']['totalExp']);
+                Writer::green("Win (%d EXP) (Stage %d).", (int)$battleResult['data']['totalExp'], $this->account->getStage());
+                if ($toFirstLost) {
+                    $this->account->setStage($this->account->getStage() + 1);
+                }
             } else {
-                Writer::red("Lost!");
+                Writer::red("Lost! (Stage %d)", $this->account->getStage());
+                if ($toFirstLost) {
+                    break;
+                }
             }
 
             $rewards = $battleResult['data']['rewards'];
@@ -373,7 +412,11 @@ class Bot
 
             if ($inventory->getRation() >= 100) {
                 Writer::white("Left rations: %d. Waiting: %ds.", $inventory->getRation(), $actions * 4);
-                sleep($actions * 4);
+                if (!$toFirstLost) {
+                    sleep($actions * 4);
+                } else {
+                    sleep(rand(2,3));
+                }
             }
         }
 

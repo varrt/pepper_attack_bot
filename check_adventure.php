@@ -30,7 +30,7 @@ foreach ($accounts->getAccounts() as $account) {
             continue;
         }
 
-        $bot->battlePvE(1);
+        $bot->battlePvE(5, true);
     } catch (Exception $e) {
         Writer::red("Exception %s", $e->getMessage());
         continue;

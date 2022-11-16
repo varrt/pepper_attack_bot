@@ -12,6 +12,10 @@ echo "Start at: " . date("Y-m-d H:i:s")."\n";
 echo "--------------------------------------------------------------------------------------\n";
 
 $accounts = new AccountsReader(__DIR__."/accounts.json");
+if (isset($argv[1])) {
+    $account = $accounts->getAccount($argv[1]);
+    $accounts->setAccounts([$account]);
+}
 
 foreach ($accounts->getAccounts() as $account) {
     try {

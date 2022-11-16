@@ -87,6 +87,26 @@ class Client
         return new Details((int)$data['data']['numFreeBeers']);
     }
 
+    public function getBalance(): int
+    {
+        $response = $this->client->request(
+            'GET',
+            $this->url . "/balance",
+            [
+                'headers' => array_merge([
+                    'authorization' => 'Bearer ' . $this->token
+                ], $this->headers)
+            ]
+        );
+
+        if ($response->getStatusCode() !== 200) {
+            echo "Error call. Status code " . $response->getStatusCode() . "\n";
+        }
+
+        $data = json_decode($response->getContent(), true);
+        return (int)$data['data']['data'][0]['balance'];
+    }
+
     public function admireTournament(string $id): void
     {
         $response = $this->client->request(
